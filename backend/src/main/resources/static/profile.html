@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile & ATS Resume - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .profile-wrapper {
+            padding: 40px 0;
+            flex-grow: 1;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        @media (max-width: 992px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .profile-side {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .info-card {
+            padding: 30px;
+        }
+        .score-gauge-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .score-circle {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--bg-secondary) 60%, transparent 62%),
+                        conic-gradient(var(--primary) calc(var(--score-pct) * 1%), rgba(255,255,255,0.05) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+        .resume-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .resume-list-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: var(--primary);
+        }
+        .bullet-list {
+            margin-left: 20px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: var(--text-secondary);
+        }
+        .bullet-list li span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .chip {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: var(--primary-glow);
+            border: 1px solid rgba(99,102,241,0.2);
+            color: var(--primary);
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="profile-wrapper">
+        <div class="container profile-grid">
+            
+            <!-- Left Side Pane: Profile Settings -->
+            <div class="profile-side">
+                <div class="info-card glass-panel">
+                    <h3 style="margin-bottom: 20px; font-family: var(--font-heading);">Account Profile</h3>
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label class="form-label" for="profile-name">Full Name</label>
+                            <input class="form-input" type="text" id="profile-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="profile-skills">Professional Skills</label>
+                            <input class="form-input" type="text" id="profile-skills" placeholder="Java, Python, Git (comma-separated)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="profile-bio">Bio</label>
+                            <textarea class="form-input" id="profile-bio" rows="3" style="resize: none;" placeholder="Tell us about your career goals..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Update Details</button>
+                    </form>
+                </div>
+
+                <div class="info-card glass-panel">
+                    <h3 style="margin-bottom: 20px; font-family: var(--font-heading);">Security Settings</h3>
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label class="form-label" for="old-pass">Current Password</label>
+                            <input class="form-input" type="password" id="old-pass" required placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-pass">New Password</label>
+                            <input class="form-input" type="password" id="new-pass" required placeholder="••••••••" minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-secondary" style="width: 100%;">Change Password</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Main Pane: Resume ATS Analyzer -->
+            <div class="profile-main">
+                <div class="info-card glass-panel">
+                    <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">ATS Resume Analyzer</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                        Upload your PDF resume to parse structure, score compatibility (ATS), extract keywords, and view personalized career adjustments.
+                    </p>
+                    
+                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 30px;">
+                        <input type="file" id="resume-file" accept="application/pdf" style="display: none;">
+                        <button class="btn btn-primary" onclick="document.getElementById('resume-file').click()">Select PDF Resume</button>
+                        <span id="file-name-display" style="color: var(--text-secondary); font-size: 0.9rem;">No file chosen</span>
+                        <button class="btn btn-secondary" id="upload-resume-btn" disabled>Analyze File</button>
+                    </div>
+
+                    <!-- Uploaded Resumes Log -->
+                    <h4 style="margin-bottom: 12px; font-size: 1rem;">Upload History</h4>
+                    <div id="resumes-history-list" style="max-height: 150px; overflow-y: auto; margin-bottom: 20px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">No uploads yet.</p>
+                    </div>
+                </div>
+
+                <!-- ATS Evaluation Output Dashboard -->
+                <div class="info-card glass-panel" id="ats-result-card" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h3 id="result-filename" style="font-family: var(--font-heading);">resume_draft.pdf</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;" id="result-date">Analyzed on July 1, 2026</p>
+                        </div>
+                        <div class="score-gauge-container">
+                            <div class="score-circle" id="ats-score-circle" style="--score-pct: 75;">75%</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h4 style="color: var(--success); display: flex; align-items: center; gap: 8px;">✓ Strengths</h4>
+                            <ul class="bullet-list" id="ats-strengths"></ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--danger); display: flex; align-items: center; gap: 8px;">✗ Weaknesses</h4>
+                            <ul class="bullet-list" id="ats-weaknesses"></ul>
+                        </div>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 25px 0;">
+
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--primary); margin-bottom: 10px;">Recommended Keywords / Skills</h4>
+                        <div id="ats-skills"></div>
+                    </div>
+
+                    <div>
+                        <h4 style="color: var(--warning); margin-bottom: 10px;">Actionable Improvements</h4>
+                        <ul class="bullet-list" id="ats-improvements"></ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load current profile
+            try {
+                const user = await API.get('/users/profile');
+                document.getElementById('profile-name').value = user.fullName;
+                document.getElementById('profile-skills').value = user.skills || '';
+                document.getElementById('profile-bio').value = user.bio || '';
+            } catch (err) {}
+
+            // Load resume upload logs
+            loadResumeHistory();
+        });
+
+        // File Selector handling
+        const fileInput = document.getElementById('resume-file');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const uploadBtn = document.getElementById('upload-resume-btn');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileNameDisplay.textContent = file.name;
+                uploadBtn.disabled = false;
+            } else {
+                fileNameDisplay.textContent = 'No file chosen';
+                uploadBtn.disabled = true;
+            }
+        });
+
+        // Upload and Analyze API
+        uploadBtn.addEventListener('click', async () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            try {
+                const res = await API.uploadFile('/resumes/upload', file);
+                API.showToast('ATS Scan complete!', 'success');
+                displayATSReport(res);
+                loadResumeHistory(); // Reload history logs
+            } catch (err) {}
+        });
+
+        async function loadResumeHistory() {
+            const container = document.getElementById('resumes-history-list');
+            try {
+                const list = await API.get('/resumes');
+                if (list.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No uploads yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = list.map(res => `
+                    <div class="resume-list-item" onclick="loadResumeReport(${res.id})">
+                        <div>
+                            <div style="font-weight: 500; font-size: 0.95rem;">${res.fileName}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">${new Date(res.createdAt).toLocaleDateString()}</div>
+                        </div>
+                        <div style="font-weight: 700; color: ${res.atsScore >= 75 ? 'var(--success)' : 'var(--warning)'}">${res.atsScore}%</div>
+                    </div>
+                `).join('');
+            } catch (err) {}
+        }
+
+        async function loadResumeReport(id) {
+            try {
+                const res = await API.get(`/resumes/${id}`);
+                displayATSReport(res);
+            } catch (err) {}
+        }
+
+        function displayATSReport(res) {
+            document.getElementById('ats-result-card').style.display = 'block';
+            document.getElementById('result-filename').textContent = res.fileName;
+            document.getElementById('result-date').textContent = `Analyzed on ${new Date(res.createdAt).toLocaleDateString()}`;
+            
+            const circle = document.getElementById('ats-score-circle');
+            circle.textContent = `${res.atsScore}%`;
+            circle.style.setProperty('--score-pct', res.atsScore);
+
+            if (res.atsScore >= 75) {
+                circle.style.border = '2px solid var(--success)';
+                circle.style.boxShadow = '0 0 20px rgba(16,185,129,0.2)';
+            } else {
+                circle.style.border = '2px solid var(--warning)';
+                circle.style.boxShadow = '0 0 20px rgba(245,158,11,0.2)';
+            }
+
+            // Fill strengths
+            document.getElementById('ats-strengths').innerHTML = res.strengths.map(s => `<li>${s}</li>`).join('');
+            // Fill weaknesses
+            document.getElementById('ats-weaknesses').innerHTML = res.weaknesses.map(w => `<li>${w}</li>`).join('');
+            // Fill recommended skills
+            document.getElementById('ats-skills').innerHTML = res.recommendedSkills.map(s => `<span class="chip">${s}</span>`).join('');
+            if (res.recommendedSkills.length === 0) {
+                document.getElementById('ats-skills').innerHTML = '<span style="color: var(--text-secondary); font-size: 0.85rem;">None missing! Excellent match.</span>';
+            }
+            // Fill improvements
+            document.getElementById('ats-improvements').innerHTML = res.improvements.map(i => `<li>${i}</li>`).join('');
+        }
+
+        // Profile details form submission
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('profile-name').value;
+            const skills = document.getElementById('profile-skills').value;
+            const bio = document.getElementById('profile-bio').value;
+
+            try {
+                await API.put('/users/profile', { fullName, skills, bio });
+                // Update local storage name greeting
+                localStorage.setItem('fullName', fullName);
+                Auth.renderNavBar(); // update nav greeting
+                API.showToast('Profile updated successfully!', 'success');
+            } catch (err) {}
+        });
+
+        // Change password form submission
+        document.getElementById('password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const oldPassword = document.getElementById('old-pass').value;
+            const newPassword = document.getElementById('new-pass').value;
+
+            try {
+                await API.post('/users/change-password', { oldPassword, newPassword });
+                API.showToast('Password changed successfully!', 'success');
+                document.getElementById('password-form').reset();
+            } catch (err) {}
+        });
+    </script>
+</body>
+</html>

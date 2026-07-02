@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Agent Interview - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/voice-interview.css">
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="voice-wrapper">
+        <div class="container" style="max-width: 700px;">
+            
+            <!-- Setup Pane -->
+            <div class="glass-panel voice-setup-card" id="setup-card">
+                <h2 style="font-family: var(--font-heading); font-size: 1.75rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;">
+                    Conversational Voice Agent
+                </h2>
+                <p style="color: var(--text-secondary); text-align: center; margin-bottom: 25px;">
+                    Engage in a continuous, voice-to-voice interview round. The AI will speak questions, listen to your verbal response, provide interactive follow-up questions, and evaluate your final performance.
+                </p>
+
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label class="form-label" for="voice-category">Interview Topic</label>
+                    <select class="form-input" id="voice-category" style="background-color: var(--bg-secondary);">
+                        <option value="Java Concurrency">Java Concurrency & Core</option>
+                        <option value="System Design">System Design & Databases</option>
+                        <option value="Data Structures">Data Structures & Algorithms Concepts</option>
+                        <option value="Behavioral">Behavioral HR & Leadership</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="startVoiceInterview()" style="width: 100%;">Initialize Voice Session</button>
+            </div>
+
+            <!-- Active Voice Session Arena -->
+            <div class="glass-panel voice-arena-card" id="arena-card" style="display: none;">
+                <div class="voice-header">
+                    <div>
+                        <span id="voice-topic-badge" style="font-size: 0.8rem; color: var(--primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">JAVA CONCURRENCY</span>
+                        <h2 style="font-family: var(--font-heading); font-size: 1.25rem; margin-top: 4px;" id="voice-session-title">Conversational Round</h2>
+                    </div>
+                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--warning);" id="voice-timer">⏱️ 00:00</div>
+                </div>
+
+                <!-- Pulse Orb System -->
+                <div class="voice-agent-display" style="display: flex; justify-content: center; align-items: center; height: 120px; margin-bottom: 25px;">
+                    <canvas id="voice-avatar-canvas" style="display: block; width: 120px; height: 120px; z-index: 5;"></canvas>
+                </div>
+                <div style="text-align: center; margin-top: 10px; font-weight: 600; font-size: 0.9rem; margin-bottom: 20px;" id="agent-state-label">AI Connecting...</div>
+
+                <!-- Dynamic Soundwave -->
+                <div class="voice-soundwave" id="soundwave-bar-row">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+
+                <!-- Chat transcript box -->
+                <div class="transcript-feed-box" id="transcript-feed">
+                    <!-- Session lines added here -->
+                </div>
+
+                <div class="voice-action-bar">
+                    <button class="btn btn-danger" onclick="finalizeVoiceInterview()" style="padding: 10px 24px;">🛑 Finish & Evaluate</button>
+                </div>
+            </div>
+
+            <!-- Score & Evaluation Report Card -->
+            <div class="glass-panel voice-report-card" id="report-card" style="display: none;">
+                <h2 style="font-family: var(--font-heading); font-size: 1.75rem; text-align: center; color: var(--success); margin-bottom: 5px;">Evaluation Compiled</h2>
+                <p style="color: var(--text-secondary); text-align: center; font-size: 0.9rem; margin-bottom: 25px;">Performance scorecard for your voice agent mock session.</p>
+
+                <div class="score-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div class="score-box glass-panel" style="text-align: center; padding: 15px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Fluency</div>
+                        <div class="score-val" id="report-fluency" style="font-size: 1.75rem; font-weight: 800; color: var(--primary); margin-top: 5px;">0%</div>
+                    </div>
+                    <div class="score-box glass-panel" style="text-align: center; padding: 15px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Accuracy</div>
+                        <div class="score-val" id="report-accuracy" style="font-size: 1.75rem; font-weight: 800; color: var(--secondary); margin-top: 5px;">0%</div>
+                    </div>
+                    <div class="score-box glass-panel" style="text-align: center; padding: 15px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Composite</div>
+                        <div class="score-val" id="report-composite" style="font-size: 1.75rem; font-weight: 800; color: var(--success); margin-top: 5px;">0%</div>
+                    </div>
+                </div>
+
+                <div class="info-card glass-panel" style="padding: 20px; margin-bottom: 25px;">
+                    <h4 style="color: var(--primary); margin-bottom: 8px;">AI Evaluator Review</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" id="report-feedback">Feedback details</p>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <a href="dashboard.html" class="btn btn-secondary" style="flex-grow: 1; text-align: center;">Return to Dashboard</a>
+                    <button class="btn btn-primary" onclick="location.reload()" style="flex-grow: 1;">Practice Again</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/avatar.js"></script>
+    <script src="js/voice-interview.js"></script>
+</body>
+</html>

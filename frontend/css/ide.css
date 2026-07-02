@@ -1,0 +1,227 @@
+/* IDE Workspace Wrapper */
+.ide-wrapper {
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    padding: 15px;
+    background: #0b0c10;
+}
+.ide-container {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 15px;
+    height: 100%;
+}
+@media (max-width: 992px) {
+    .ide-container {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+    .ide-wrapper {
+        height: auto;
+        overflow: auto;
+    }
+}
+
+/* Left Pane Scroll Columns */
+.ide-left-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    overflow-y: auto;
+}
+.problem-statement-card {
+    padding: 24px;
+    flex-grow: 1;
+}
+.problem-difficulty-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--success);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.problem-description-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+.problem-description-content code {
+    background: rgba(255,255,255,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    color: var(--text-primary);
+}
+.problem-description-content pre {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    margin: 10px 0;
+}
+
+/* Test case items */
+.test-cases-card {
+    padding: 20px;
+    min-height: 200px;
+}
+.test-cases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.test-case-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.test-case-item.pass {
+    border-color: var(--success);
+    background: rgba(16,185,129,0.02);
+}
+.test-case-item.fail {
+    border-color: var(--danger);
+    background: rgba(239,68,68,0.02);
+}
+.tc-status-badge {
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+/* Right Pane Workspace */
+.ide-right-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    overflow: hidden;
+}
+.editor-card {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+}
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+#monaco-editor-container {
+    width: 100%;
+    flex-grow: 1;
+    min-height: 300px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1e1e1e;
+}
+
+/* Bottom Console / Review tabs */
+.ide-bottom-tabs {
+    height: 200px;
+    background: rgba(15, 17, 26, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.bottom-tab-buttons {
+    display: flex;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid var(--border-color);
+}
+.bottom-tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 18px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+.bottom-tab-btn:hover {
+    color: var(--text-primary);
+}
+.bottom-tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+.bottom-tab-content {
+    display: none;
+    padding: 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.bottom-tab-content.active {
+    display: block;
+}
+
+/* Console logs */
+.console-terminal {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+.console-terminal.error { color: #f87171; }
+.console-terminal.success { color: #4ade80; }
+
+/* AI Complexity Card Layouts */
+.review-output-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.complexity-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.complexity-box {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+}
+.complexity-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.complexity-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-family: monospace;
+    color: var(--secondary);
+    margin-top: 4px;
+}
+.review-comment-item {
+    background: rgba(99, 102, 241, 0.03);
+    border-left: 3px solid var(--primary);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}

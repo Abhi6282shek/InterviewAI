@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Results - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- html2pdf CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        .result-wrapper {
+            padding: 40px 0;
+            flex-grow: 1;
+        }
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 992px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .result-card {
+            padding: 30px;
+        }
+        .score-display-big {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 15px 0;
+        }
+        .qa-log-item {
+            padding: 24px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .qa-log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .box-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-top: 15px;
+            margin-bottom: 6px;
+        }
+        .ideal-box {
+            background: rgba(16,185,129,0.05);
+            border: 1px solid rgba(16,185,129,0.15);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        .bookmark-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .bookmark-btn.active {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        /* Certificate styling */
+        .certificate-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10,11,16,0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+        .certificate-frame {
+            width: 800px;
+            height: 550px;
+            padding: 40px;
+            background: #0f111a;
+            border: 10px solid rgba(255,255,255,0.03);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99,102,241,0.1) 0px, transparent 40%),
+                radial-gradient(at 100% 100%, rgba(168,85,247,0.1) 0px, transparent 40%);
+        }
+        .cert-border-accent {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid rgba(99,102,241,0.3);
+            pointer-events: none;
+        }
+        .bullet-list {
+            margin-left: 20px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="result-wrapper">
+        <div class="container" id="printable-area">
+            
+            <!-- Result Header Actions -->
+            <div class="header-actions">
+                <div>
+                    <span style="font-size: 0.85rem; color: var(--primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;" id="result-category">JAVA PRACTICE</span>
+                    <h1 style="font-size: 2.25rem; font-family: var(--font-heading);" id="result-title">Performance Summary</h1>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" onclick="exportPDF()">📥 Download PDF Report</button>
+                    <button class="btn btn-primary" id="view-cert-btn" style="display: none;">🎓 View Certificate</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Result Layout -->
+            <div class="results-grid">
+                
+                <!-- Left column: overall scores, metrics -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <div class="result-card glass-panel" style="text-align: center;">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Composite Score</h3>
+                        <div class="score-display-big" id="overall-score-pct">0%</div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);" id="overall-feedback-summary">Evaluation complete.</p>
+                        
+                        <div style="margin-top: 24px; display: flex; justify-content: space-around; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Duration</div>
+                                <div style="font-weight: 700; font-size: 1.1rem; margin-top: 4px;" id="result-duration">0 min</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Difficulty</div>
+                                <div style="font-weight: 700; font-size: 1.1rem; margin-top: 4px;" id="result-difficulty">N/A</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strengths and Weaknesses -->
+                    <div class="result-card glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 20px; color: var(--success);">✓ Key Strengths</h3>
+                        <ul class="bullet-list" id="strengths-list"></ul>
+                        
+                        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                        
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 20px; color: var(--danger);">✗ Gaps & Weaknesses</h3>
+                        <ul class="bullet-list" id="weaknesses-list"></ul>
+                    </div>
+
+                    <!-- AI Career recommendations -->
+                    <div class="result-card glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 15px; color: var(--primary);">AI Roadmap</h3>
+                        <ul class="bullet-list" id="roadmaps-list"></ul>
+                    </div>
+                </div>
+
+                <!-- Right column: question logs -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 15px;">Question History Log</h3>
+                    
+                    <div id="qa-log-container">
+                        <!-- Questions lists will render dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div class="certificate-modal" id="cert-modal">
+        <div class="certificate-frame">
+            <div class="cert-border-accent"></div>
+            
+            <div style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--primary);">
+                INTERVIEWAI
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <h1 style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 800; color: #ffffff; letter-spacing: 0.05em;">CERTIFICATE OF COMPLETION</h1>
+                <p style="color: var(--text-secondary); margin-top: 6px; font-style: italic;">This credential confirms technical capability and mock interview performance</p>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">PROUDLY PRESENTED TO</p>
+                <h2 style="font-family: var(--font-heading); font-size: 2rem; color: #ffffff; margin-top: 8px; text-decoration: underline; text-decoration-color: var(--primary); text-underline-offset: 8px;" id="cert-user-name">John Doe</h2>
+            </div>
+            
+            <div style="max-width: 550px;">
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    For successfully executing the mock interview curriculum in <strong id="cert-category" style="color: var(--secondary);">Java Programming</strong>, exhibiting a mastery score of <strong id="cert-score" style="color: var(--success);">85%</strong> under dynamic temporal constraint criteria.
+                </p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
+                <div>
+                    Date: <span id="cert-date" style="color: var(--text-secondary);">July 1, 2026</span>
+                </div>
+                <div>
+                    Credential ID: <span id="cert-id" style="color: var(--text-secondary);">CERT-JAVA-12345</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="closeCert()" style="position: absolute; top: 15px; right: 15px; padding: 6px 12px; font-size: 0.8rem;">Close</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const interviewId = urlParams.get('id');
+        let certificateId = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!interviewId) {
+                API.showToast('Invalid Interview Result Target', 'error');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+                return;
+            }
+
+            try {
+                const res = await API.get(`/interviews/${interviewId}/results`);
+
+                // Set headers details
+                document.getElementById('result-category').textContent = `${res.category} Practice`;
+                document.getElementById('overall-score-pct').textContent = `${res.score}%`;
+                document.getElementById('overall-feedback-summary').textContent = res.overallFeedback;
+                document.getElementById('result-duration').textContent = `${Math.round(res.durationSeconds / 60)} min`;
+                document.getElementById('result-difficulty').textContent = res.difficulty;
+
+                // Fill list values
+                document.getElementById('strengths-list').innerHTML = res.strengths.map(s => `<li>${s}</li>`).join('');
+                document.getElementById('weaknesses-list').innerHTML = res.weaknesses.map(w => `<li>${w}</li>`).join('');
+                document.getElementById('roadmaps-list').innerHTML = res.careerRecommendations.map(r => `<li>${r}</li>`).join('');
+
+                // Display certificate buttons if eligible
+                if (res.certificateId) {
+                    certificateId = res.certificateId;
+                    document.getElementById('view-cert-btn').style.display = 'inline-flex';
+                    setupCert(res);
+                }
+
+                // Render logs
+                renderQaLogs(res.questions);
+
+            } catch (err) {}
+        });
+
+        function renderQaLogs(questions) {
+            const container = document.getElementById('qa-log-container');
+            container.innerHTML = questions.map(q => `
+                <div class="qa-log-item">
+                    <div class="qa-log-header">
+                        <h4 style="font-family: var(--font-heading); max-width: 80%;">${q.questionText}</h4>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                            <span class="badge ${q.score >= 80 ? 'badge-success' : 'badge-warning'}" style="font-size: 0.85rem; font-weight: 700;">Score: ${q.score}%</span>
+                            <button class="bookmark-btn ${q.bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.id}, this)">
+                                ${q.bookmarked ? '★ Bookmarked' : '☆ Bookmark'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="box-title">Your Answer</div>
+                    <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; font-style: italic;">
+                        "${q.userAnswer}"
+                    </p>
+
+                    <div class="box-title">AI Feedback Evaluation</div>
+                    <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;">
+                        ${q.aiFeedback}
+                    </p>
+
+                    <div class="box-title">Ideal Model Answer</div>
+                    <div class="ideal-box">${q.idealAnswer}</div>
+                </div>
+            `).join('');
+        }
+
+        async function toggleBookmark(qId, btn) {
+            try {
+                const res = await API.post(`/interviews/bookmark-question/${qId}`);
+                if (res.bookmarked) {
+                    btn.classList.add('active');
+                    btn.textContent = '★ Bookmarked';
+                    API.showToast('Question bookmarked!', 'success');
+                } else {
+                    btn.classList.remove('active');
+                    btn.textContent = '☆ Bookmark';
+                }
+            } catch (err) {}
+        }
+
+        // PDF download functionality using html2pdf
+        function exportPDF() {
+            const element = document.getElementById('printable-area');
+            const opt = {
+                margin:       10,
+                filename:     `InterviewAI_Report_${interviewId}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0a0b10' },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Temporary hide header buttons for clean report view
+            const actions = document.querySelector('.header-actions');
+            const bookmarks = document.querySelectorAll('.bookmark-btn');
+            
+            if (actions) actions.style.display = 'none';
+            bookmarks.forEach(b => b.style.display = 'none');
+            
+            API.showLoader();
+            html2pdf().set(opt).from(element).save().then(() => {
+                API.hideLoader();
+                if (actions) actions.style.display = 'flex';
+                bookmarks.forEach(b => b.style.display = 'inline-block');
+            });
+        }
+
+        // Certificate modal triggers
+        const modal = document.getElementById('cert-modal');
+        document.getElementById('view-cert-btn').addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        function closeCert() {
+            modal.style.display = 'none';
+        }
+
+        function setupCert(res) {
+            const user = Auth.getCurrentUser();
+            document.getElementById('cert-user-name').textContent = user.fullName;
+            document.getElementById('cert-category').textContent = `${res.category} Mock Curriculum`;
+            document.getElementById('cert-score').textContent = `${res.score}%`;
+            document.getElementById('cert-id').textContent = res.certificateId;
+            document.getElementById('cert-date').textContent = new Date(res.completedAt || res.createdAt).toLocaleDateString();
+        }
+    </script>
+</body>
+</html>

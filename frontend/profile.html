@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile & ATS Resume - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="profile-wrapper">
+        <div class="container profile-grid">
+            
+            <!-- Left Side Pane: Profile Settings -->
+            <div class="profile-side">
+                <div class="info-card glass-panel">
+                    <h3 style="margin-bottom: 20px; font-family: var(--font-heading);">Account Profile</h3>
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label class="form-label" for="profile-name">Full Name</label>
+                            <input class="form-input" type="text" id="profile-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="profile-skills">Professional Skills</label>
+                            <input class="form-input" type="text" id="profile-skills" placeholder="Java, Python, Git (comma-separated)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="profile-bio">Bio</label>
+                            <textarea class="form-input" id="profile-bio" rows="3" style="resize: none;" placeholder="Tell us about your career goals..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Update Details</button>
+                    </form>
+                </div>
+
+                <div class="info-card glass-panel">
+                    <h3 style="margin-bottom: 20px; font-family: var(--font-heading);">Security Settings</h3>
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label class="form-label" for="old-pass">Current Password</label>
+                            <input class="form-input" type="password" id="old-pass" required placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-pass">New Password</label>
+                            <input class="form-input" type="password" id="new-pass" required placeholder="••••••••" minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-secondary" style="width: 100%;">Change Password</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Main Pane: Resume placement launchpad -->
+            <div class="profile-main">
+                <!-- Navigation Tabs -->
+                <div class="profile-tabs">
+                    <button class="tab-btn active" onclick="switchTab('ats-analyzer', this)">ATS Analyzer</button>
+                    <button class="tab-btn" onclick="switchTab('resume-builder', this)">Templates & Builder</button>
+                    <button class="tab-btn" onclick="switchTab('bullet-improver', this)">STAR Bullet & Grammar</button>
+                    <button class="tab-btn" onclick="switchTab('linkedin-booster', this)">LinkedIn Optimizer</button>
+                    <button class="tab-btn" onclick="switchTab('github-analyzer', this)">GitHub Analyzer</button>
+                </div>
+
+                <!-- Tab 1: ATS Resume Analyzer -->
+                <div class="tab-content active" id="tab-ats-analyzer">
+                    <div class="info-card glass-panel">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">ATS Resume Analyzer</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                            Upload your PDF resume to parse structure, score compatibility (ATS), extract keywords, and view personalized career adjustments.
+                        </p>
+                        
+                        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 30px; flex-wrap: wrap;">
+                            <input type="file" id="resume-file" accept="application/pdf" style="display: none;">
+                            <button class="btn btn-primary" onclick="document.getElementById('resume-file').click()">Select PDF Resume</button>
+                            <span id="file-name-display" style="color: var(--text-secondary); font-size: 0.9rem;">No file chosen</span>
+                            <button class="btn btn-secondary" id="upload-resume-btn" disabled>Analyze File</button>
+                        </div>
+
+                        <!-- Uploaded Resumes Log -->
+                        <h4 style="margin-bottom: 12px; font-size: 1rem;">Upload History</h4>
+                        <div id="resumes-history-list" style="max-height: 150px; overflow-y: auto; margin-bottom: 20px;">
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">No uploads yet.</p>
+                        </div>
+                    </div>
+
+                    <!-- ATS Evaluation Output Dashboard -->
+                    <div class="info-card glass-panel" id="ats-result-card" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+                            <div>
+                                <h3 id="result-filename" style="font-family: var(--font-heading); margin: 0;">resume_draft.pdf</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0 0;" id="result-date">Analyzed on July 1, 2026</p>
+                            </div>
+                            <div class="score-gauge-container" style="margin: 0;">
+                                <div class="score-circle" id="ats-score-circle" style="--score-pct: 75; width: 80px; height: 80px; font-size: 1.25rem;">75%</div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <h4 style="color: var(--success); display: flex; align-items: center; gap: 8px; font-size: 0.95rem; margin-bottom: 10px;">✓ Strengths</h4>
+                                <ul class="bullet-list" id="ats-strengths" style="margin-left: 15px; font-size: 0.85rem;"></ul>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--danger); display: flex; align-items: center; gap: 8px; font-size: 0.95rem; margin-bottom: 10px;">✗ Weaknesses</h4>
+                                <ul class="bullet-list" id="ats-weaknesses" style="margin-left: 15px; font-size: 0.85rem;"></ul>
+                            </div>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 25px 0;">
+
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 0.95rem;">Recommended Keywords / Skills</h4>
+                            <div id="ats-skills"></div>
+                        </div>
+
+                        <div>
+                            <h4 style="color: var(--warning); margin-bottom: 10px; font-size: 0.95rem;">Actionable Improvements</h4>
+                            <ul class="bullet-list" id="ats-improvements" style="margin-left: 15px; font-size: 0.85rem;"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Resume Builder & Templates -->
+                <div class="tab-content" id="tab-resume-builder">
+                    <div class="info-card glass-panel" style="max-width: 100%;">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">Resume Builder & Templates</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 25px;">
+                            Select a verified template format, enter your professional credentials, and view real-time changes instantly.
+                        </p>
+
+                        <div class="builder-split-grid">
+                            
+                            <!-- Left inputs form -->
+                            <div class="builder-form-pane">
+                                <h4 style="margin-bottom: 12px; font-size: 0.95rem; color: var(--primary);">1. Choose Template Format</h4>
+                                <div class="templates-grid" style="margin-bottom: 20px;">
+                                    <div class="template-card glass-panel selected" style="border-color: var(--primary);" id="tpl-minimalist" onclick="selectTemplate('minimalist')">
+                                        <div class="template-icon">📄</div>
+                                        <h5 style="margin: 0 0 4px; font-size: 0.85rem;">Harvard Minimalist</h5>
+                                        <span style="font-size: 0.7rem; color: var(--text-muted);">Standard, clean corporate layout.</span>
+                                    </div>
+                                    <div class="template-card glass-panel" id="tpl-modern" onclick="selectTemplate('modern')">
+                                        <div class="template-icon">💼</div>
+                                        <h5 style="margin: 0 0 4px; font-size: 0.85rem;">Modern Professional</h5>
+                                        <span style="font-size: 0.7rem; color: var(--text-muted);">Split-column highlighted design.</span>
+                                    </div>
+                                </div>
+
+                                <h4 style="margin-bottom: 15px; font-size: 0.95rem; color: var(--primary);">2. Complete Credentials</h4>
+                                <form id="builder-form" style="display: flex; flex-direction: column; gap: 15px;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        <div class="form-group">
+                                            <label class="form-label">Email Address</label>
+                                            <input type="email" class="form-input" id="build-email" placeholder="name@domain.com" required oninput="updateLivePreview()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Phone & Contact</label>
+                                            <input type="text" class="form-input" id="build-phone" placeholder="+1 (555) 123-4567" required oninput="updateLivePreview()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">GitHub / Portfolio Links</label>
+                                        <input type="text" class="form-input" id="build-link" placeholder="github.com/profile" oninput="updateLivePreview()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Professional Summary</label>
+                                        <textarea class="form-input" id="build-summary" rows="3" placeholder="Dedicated developer with experience in Spring Boot backend design..." oninput="updateLivePreview()"></textarea>
+                                    </div>
+                                    
+                                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 5px 0;">
+                                    <h5 style="margin: 0; font-size: 0.85rem; color: var(--primary);">Experience (Latest Role)</h5>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        <div class="form-group">
+                                            <label class="form-label">Company Name</label>
+                                            <input type="text" class="form-input" id="build-exp-company" placeholder="Example Corporation" oninput="updateLivePreview()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Job Title</label>
+                                            <input type="text" class="form-input" id="build-exp-title" placeholder="Backend Engineer" oninput="updateLivePreview()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Job Bullets (One per line)</label>
+                                        <textarea class="form-input" id="build-exp-bullets" rows="3" placeholder="Optimized database schema using PostgreSQL.&#10;Integrated REST controllers with Spring Security." oninput="updateLivePreview()"></textarea>
+                                    </div>
+
+                                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 5px 0;">
+                                    <h5 style="margin: 0; font-size: 0.85rem; color: var(--primary);">Education</h5>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        <div class="form-group">
+                                            <label class="form-label">School / University</label>
+                                            <input type="text" class="form-input" id="build-edu-school" placeholder="Institute of Technology" oninput="updateLivePreview()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Degree & Major</label>
+                                            <input type="text" class="form-input" id="build-edu-degree" placeholder="B.S. in Computer Science" oninput="updateLivePreview()">
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">📥 Print & Export PDF</button>
+                                </form>
+                            </div>
+
+                            <!-- Right Live preview pane -->
+                            <div class="builder-preview-pane">
+                                <h4 style="margin-bottom: 12px; font-size: 0.95rem; color: var(--secondary);">Live Document Preview</h4>
+                                <div class="preview-page-container" id="live-resume-preview">
+                                    <!-- Rendered Resume content updates in real time -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Bullet & Grammar Improver -->
+                <div class="tab-content" id="tab-bullet-improver">
+                    <!-- Grammar Checker Card -->
+                    <div class="info-card glass-panel">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">Resume Grammar Checker</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">
+                            Paste your bullet points or profile summary to verify grammatical tenses, structure, and active phrasing.
+                        </p>
+                        <div class="form-group">
+                            <textarea class="form-input" id="grammar-input" rows="3" placeholder="Write or paste sentences to check... (e.g. 'I was working on java coding and fix some bugs in relational database.')"></textarea>
+                        </div>
+                        <button class="btn btn-secondary" onclick="checkGrammar()">Check Phrasing</button>
+                        
+                        <div class="improver-output-box" id="grammar-result" style="display: none;">
+                            <h4 style="margin: 0; font-size: 0.95rem; color: var(--primary);">Spelling & Grammar Review</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; font-style: italic;" id="grammar-status-text"></p>
+                            <div class="suggestion-variation" style="border-left-color: var(--success); background: rgba(16, 185, 129, 0.03);">
+                                <strong style="color: var(--success);">Suggested Revision</strong>
+                                <span id="grammar-suggestion-text"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STAR Bullet Improver -->
+                    <div class="info-card glass-panel">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">STAR Bullet Point Improver</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">
+                            Enter a basic description of your work to translate it into a high-impact, metrics-driven bullet point (STAR method).
+                        </p>
+                        <div class="form-group">
+                            <label class="form-label">Basic Description</label>
+                            <input type="text" class="form-input" id="bullet-input" placeholder="e.g. 'Created APIs for the database.'">
+                        </div>
+                        <button class="btn btn-primary" onclick="improveBullet()">Upgrade with AI</button>
+
+                        <div class="improver-output-box" id="bullet-output-box" style="display: none;">
+                            <h4 style="margin: 0; font-size: 0.95rem; color: var(--success);">Enhanced STAR Variations</h4>
+                            <div class="suggestion-variation">
+                                <strong id="var-1-label">Action-Oriented</strong>
+                                <span id="var-1-text">Variation 1</span>
+                            </div>
+                            <div class="suggestion-variation">
+                                <strong id="var-2-label">Metrics-Driven</strong>
+                                <span id="var-2-text">Variation 2</span>
+                            </div>
+                            <div class="suggestion-variation">
+                                <strong id="var-3-label">Leadership/Scope</strong>
+                                <span id="var-3-text">Variation 3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: LinkedIn Optimizer -->
+                <div class="tab-content" id="tab-linkedin-booster">
+                    <div class="info-card glass-panel">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">LinkedIn Headline Optimizer</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                            Generate professional, search-optimized headlines for your profile to get matched by hiring systems.
+                        </p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label class="form-label">Target Role</label>
+                                <input type="text" class="form-input" id="linkedin-role" placeholder="Backend Engineer">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Top Skills (comma separated)</label>
+                                <input type="text" class="form-input" id="linkedin-skills" placeholder="Java, Spring Boot, AWS">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateLinkedInHeadlines()">Generate Headlines</button>
+
+                        <div class="improver-output-box" id="linkedin-output-box" style="display: none;">
+                            <h4 style="margin: 0; font-size: 0.95rem; color: var(--primary);">Search-Optimized Profile Headlines</h4>
+                            <div class="suggestion-variation">
+                                <strong>Technical Specialist</strong>
+                                <span id="li-headline-1">Headline 1</span>
+                            </div>
+                            <div class="suggestion-variation">
+                                <strong>Value-Driven / Outcomes</strong>
+                                <span id="li-headline-2">Headline 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn Profile Analyzer Card -->
+                    <div class="info-card glass-panel" style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">AI LinkedIn Profile Analyzer</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                            Paste your LinkedIn profile URL or copy-paste headline metrics to audit search placement, profile summary, and experience STAR patterns.
+                        </p>
+
+                        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 25px; flex-wrap: wrap;">
+                            <input type="text" class="form-input" id="linkedin-url-input" style="max-width: 380px; margin: 0;" placeholder="e.g., linkedin.com/in/username">
+                            <button class="btn btn-primary" onclick="analyzeLinkedInProfile()">Analyze LinkedIn Profile</button>
+                        </div>
+
+                        <!-- Analysis results panels -->
+                        <div id="linkedin-analysis-results" style="display: none; flex-direction: column; gap: 20px;">
+                            
+                            <!-- Headline audit -->
+                            <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                                <h4 style="color: var(--primary); font-size: 0.9rem; margin-bottom: 8px;">1. Headline Placement Audit</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.8rem; line-height: 1.4;">
+                                    <div>
+                                        <span style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">Current Audited</span>
+                                        <p style="margin-top: 4px; font-style: italic;" id="li-headline-current">Software Engineer at Company</p>
+                                    </div>
+                                    <div>
+                                        <span style="color: var(--success); font-size: 0.7rem; text-transform: uppercase;">AI Recommended (Optimal)</span>
+                                        <p style="margin-top: 4px; font-weight: 600;" id="li-headline-target">Software Engineer | Spring Boot & REST APIs | Scaling Backend Microservices to 10k+ QPS</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- About section narrative -->
+                            <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                                <h4 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 8px;">2. Summary & About Narrative</h4>
+                                <div style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary);">
+                                    <p id="li-about-feedback" style="margin-bottom: 10px; border-left: 2px solid var(--secondary); padding-left: 10px; font-style: italic;">
+                                        Your about section is missing core keyword structures for algorithmic indexing.
+                                    </p>
+                                    <strong>AI Suggested Revision:</strong>
+                                    <p id="li-about-suggested" style="margin-top: 4px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.75rem; white-space: pre-wrap;">
+                                        Highly driven Software Engineer with 2+ years of experience specializing in Java concurrency and PostgreSQL query profiling...
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Skills & keywords checks -->
+                            <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                                <h4 style="color: var(--warning); font-size: 0.9rem; margin-bottom: 8px;">3. Recruiter Search Skill Gaps</h4>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Add these missing keywords to increase your query match score by 45%:</p>
+                                <div id="li-skills-gaps" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <!-- Badges -->
+                                </div>
+                            </div>
+
+                            <!-- Experience bullet audit -->
+                            <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                                <h4 style="color: var(--success); font-size: 0.9rem; margin-bottom: 8px;">4. Experience Bullet Points (STAR Audit)</h4>
+                                <div style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary);">
+                                    <div style="background: rgba(239, 68, 68, 0.03); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 6px; padding: 10px; margin-bottom: 10px;">
+                                        <strong style="color: var(--danger); font-size: 0.75rem;">WEAK STATEMENT:</strong>
+                                        <p style="margin-top: 2px;">"Responsible for coding features in Java."</p>
+                                    </div>
+                                    <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 6px; padding: 10px;">
+                                        <strong style="color: var(--success); font-size: 0.75rem;">OPTIMIZED STAR STATEMENT:</strong>
+                                        <p style="margin-top: 2px;" id="li-experience-star">"Architected high-throughput concurrent Java features, reducing daily ingest costs by 22% overall."</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="info-card glass-panel" style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">LinkedIn Profile Checklist</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Complete these checklist criteria to optimize your visibility to recruiter queries:</p>
+                        <ul class="linkedin-list">
+                            <li class="linkedin-item">
+                                <input type="checkbox" id="chk-headshot" checked>
+                                <div>
+                                    <strong>Professional Headshot & Banner</strong>
+                                    <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 2px;">Ensure clear lighting, professional attire, and a customized backdrop banner highlighting your stack.</p>
+                                </div>
+                            </li>
+                            <li class="linkedin-item">
+                                <input type="checkbox" id="chk-url">
+                                <div>
+                                    <strong>Customized URL Link</strong>
+                                    <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 2px;">Remove numbers from the default URL to clean up links for resumes (e.g. linkedin.com/in/johndoe).</p>
+                                </div>
+                            </li>
+                            <li class="linkedin-item">
+                                <input type="checkbox" id="chk-about">
+                                <div>
+                                    <strong>About Section Keywords</strong>
+                                    <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 2px;">Write in first person. Detail your passion, key projects, and list a structured skills keywords block at the bottom.</p>
+                                </div>
+                            </li>
+                            <li class="linkedin-item">
+                                <input type="checkbox" id="chk-experience">
+                                <div>
+                                    <strong>STAR Work Descriptions</strong>
+                                    <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 2px;">Describe roles with action-verb accomplishments instead of simple responsibility lists.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tab 5: GitHub Analyzer -->
+                <div class="tab-content" id="tab-github-analyzer">
+                    <div class="info-card glass-panel">
+                        <h3 style="margin-bottom: 10px; font-family: var(--font-heading);">AI GitHub Profile Analyzer</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 25px;">
+                            Paste your GitHub profile URL or username to audit public repositories, analyze code quality markers, and retrieve profile suggestions.
+                        </p>
+
+                        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 30px; flex-wrap: wrap;">
+                            <input type="text" class="form-input" id="github-username-input" style="max-width: 380px; margin: 0;" placeholder="e.g., torvalds or github.com/username">
+                            <button class="btn btn-primary" onclick="analyzeGithubProfile()">Analyze GitHub Profile</button>
+                        </div>
+                    </div>
+
+                    <!-- Output Panels -->
+                    <div id="github-analysis-output" style="display: none; flex-direction: column; gap: 24px; margin-top: 20px;">
+                        
+                        <!-- Account Details Card -->
+                        <div class="info-card glass-panel" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                            <img id="gh-avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover;" src="" alt="GitHub User">
+                            <div>
+                                <h3 id="gh-name" style="font-family: var(--font-heading); margin: 0;">Name</h3>
+                                <p id="gh-bio" style="color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0 8px;">Bio description</p>
+                                <div style="display: flex; gap: 15px; font-size: 0.75rem; color: var(--text-muted);">
+                                    <span id="gh-repos-count">📂 0 Repos</span>
+                                    <span id="gh-followers">👥 0 Followers</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start;">
+                            
+                            <!-- Left: Languages & Skills -->
+                            <div style="display: flex; flex-direction: column; gap: 24px;">
+                                <!-- Languages -->
+                                <div class="info-card glass-panel">
+                                    <h4 style="font-family: var(--font-heading); font-size: 1rem; color: var(--primary); margin-bottom: 15px;">Language Composition</h4>
+                                    <div id="gh-languages-container" style="display: flex; flex-direction: column; gap: 12px;">
+                                        <!-- Language rows -->
+                                    </div>
+                                </div>
+
+                                <!-- Derived Skills -->
+                                <div class="info-card glass-panel">
+                                    <h4 style="font-family: var(--font-heading); font-size: 1rem; color: var(--secondary); margin-bottom: 15px;">Core Derived Skills</h4>
+                                    <div id="gh-skills-container" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                        <!-- Skill badges -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Projects Analysis -->
+                            <div style="display: flex; flex-direction: column; gap: 24px;">
+                                <div class="info-card glass-panel">
+                                    <h4 style="font-family: var(--font-heading); font-size: 1rem; color: var(--success); margin-bottom: 15px;">AI Repository Code Quality Audits</h4>
+                                    <div id="gh-projects-container" style="display: flex; flex-direction: column; gap: 15px;">
+                                        <!-- Repos review cards -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Actionable Profile Suggestions -->
+                        <div class="info-card glass-panel">
+                            <h4 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--warning); margin-bottom: 15px;">🚀 Recommended Profile Optimization Actions</h4>
+                            <ul class="bullet-list" id="gh-suggestions-list" style="margin-left: 15px; font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                                <!-- Bullet items -->
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Printable Resume Modal -->
+    <div class="resume-modal" id="build-resume-modal">
+        <div class="resume-print-box" id="printable-resume-area">
+            <!-- Dynamically formatted print resume structure -->
+        </div>
+        <div style="position: absolute; bottom: 30px; display: flex; gap: 15px; z-index: 2010;">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Resume</button>
+            <button class="btn btn-secondary" onclick="closeResumeModal()">Close Preview</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Client-side Admin Protection before rendering content -->
+    <script>
+        if (localStorage.getItem('role') !== 'ROLE_ADMIN') {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+
+    <nav class="navbar"></nav>
+
+    <div class="admin-wrapper">
+        <div class="container admin-grid">
+            
+            <!-- Left Side Menu Selector -->
+            <div class="admin-menu">
+                <button class="admin-menu-btn active" onclick="switchSection('dashboard', this)">📊 System Stats</button>
+                <button class="admin-menu-btn" onclick="switchSection('analytics', this)">📈 Detailed Analytics</button>
+                <button class="admin-menu-btn" onclick="switchSection('users', this)">👥 Manage Users</button>
+                <button class="admin-menu-btn" onclick="switchSection('logs', this)">📝 Execution Logs</button>
+                <button class="admin-menu-btn" onclick="switchSection('api', this)">🌐 API Monitor</button>
+                <button class="admin-menu-btn" onclick="switchSection('settings', this)">⚙️ AI Configurations</button>
+            </div>
+
+            <!-- Right Content Panels -->
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                
+                <!-- SECTION 1: SYSTEM STATS -->
+                <div class="admin-content-section active glass-panel" id="section-dashboard">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px;">System Statistics</h3>
+                    
+                    <div class="stats-summary-grid">
+                        <div class="summary-card glass-panel">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Total Active Users</div>
+                            <div class="summary-value" id="stats-users">0</div>
+                        </div>
+                        <div class="summary-card glass-panel">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Total Mock Interviews</div>
+                            <div class="summary-value" id="stats-interviews">0</div>
+                        </div>
+                        <div class="summary-card glass-panel">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">System Average Score</div>
+                            <div class="summary-value" id="stats-score">0%</div>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 30px; margin-bottom: 12px; font-family: var(--font-heading);">Recent Global Activity</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Candidate</th>
+                                    <th>Category</th>
+                                    <th>Score</th>
+                                    <th>Completed At</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-recent-activity">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 20px;">No global logs found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: DETAILED ANALYTICS -->
+                <div class="admin-content-section glass-panel" id="section-analytics">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px;">Detailed Analytics</h3>
+                    <div class="analytics-grid">
+                        <div class="chart-card glass-panel">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.95rem; margin-bottom: 15px; color: var(--primary);">User Registration Trend</h4>
+                            <div style="position: relative; height: 220px; width: 100%;">
+                                <canvas id="chart-users-trend"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card glass-panel">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.95rem; margin-bottom: 15px; color: var(--secondary);">Mock Topic Distributions</h4>
+                            <div style="position: relative; height: 220px; width: 100%;">
+                                <canvas id="chart-topics-pie"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: MANAGE USERS -->
+                <div class="admin-content-section glass-panel" id="section-users">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0;">User Registry</h3>
+                        <button class="btn btn-secondary" onclick="exportUsersCSV()">📤 Export Users CSV</button>
+                    </div>
+
+                    <!-- Search & Filter Controls -->
+                    <div class="filter-bar">
+                        <input type="text" class="search-input" id="user-search-input" placeholder="Search user by name or email..." oninput="filterUserRegistry()">
+                        <select class="filter-select" id="filter-user-role" onchange="filterUserRegistry()">
+                            <option value="ALL">All Roles</option>
+                            <option value="ROLE_USER">Role: USER</option>
+                            <option value="ROLE_ADMIN">Role: ADMIN</option>
+                        </select>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-list">
+                                <!-- Users list loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: EXECUTION LOGS & ROLE HISTORY -->
+                <div class="admin-content-section glass-panel" id="section-logs">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px;">System Execution Logs</h3>
+                    
+                    <div class="log-layout">
+                        <!-- Left pane: Role History Audit -->
+                        <div>
+                            <h4 style="font-family: var(--font-heading); font-size: 0.95rem; margin-bottom: 12px; color: var(--warning);">Role Assignment Audits</h4>
+                            <div class="audit-list" id="role-audit-list">
+                                <!-- Generated Dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Right pane: Terminal Logs -->
+                        <div>
+                            <h4 style="font-family: var(--font-heading); font-size: 0.95rem; margin-bottom: 12px; color: var(--success);">Heuristic Stream Logs</h4>
+                            <div class="log-window" id="terminal-logs-window">
+                                <!-- Generated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: API MONITOR -->
+                <div class="admin-content-section glass-panel" id="section-api">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px;">API Usage Monitor</h3>
+                    
+                    <div class="stats-summary-grid" style="margin-bottom: 25px;">
+                        <div class="summary-card glass-panel" style="padding: 15px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">Total API Hits</div>
+                            <div class="summary-value" style="font-size: 1.5rem;" id="api-total-hits">14,250</div>
+                        </div>
+                        <div class="summary-card glass-panel" style="padding: 15px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">Average Latency</div>
+                            <div class="summary-value" style="font-size: 1.5rem; color: var(--secondary);" id="api-avg-latency">245ms</div>
+                        </div>
+                        <div class="summary-card glass-panel" style="padding: 15px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">Success Rate</div>
+                            <div class="summary-value" style="font-size: 1.5rem; color: var(--success);" id="api-success-rate">99.8%</div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 12px;">Endpoint Statistics Breakdown</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Route Path</th>
+                                    <th>Total Requests</th>
+                                    <th>Avg Latency</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="api-endpoint-list">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECTION 6: AI CONFIGURATIONS -->
+                <div class="admin-content-section glass-panel" id="section-settings">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px;">Global AI Settings</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 30px;">
+                        Configure the global AI provider used for question generation and grade evaluation.
+                    </p>
+
+                    <form id="admin-settings-form">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label class="form-label" for="settings-provider">AI Service Provider</label>
+                                <select class="form-input" id="settings-provider" style="background-color: var(--bg-secondary);">
+                                    <option value="MOCK">MOCK (Local Fallback heuristic engine)</option>
+                                    <option value="GEMINI">Google Gemini API</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="settings-model">Model Name</label>
+                                <input class="form-input" type="text" id="settings-model" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label" for="settings-key">API Auth Key</label>
+                            <input class="form-input" type="password" id="settings-key" placeholder="Enter API Access Token...">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label" for="settings-temp">Temperature (Randomness)</label>
+                            <input class="form-input" type="number" id="settings-temp" step="0.1" min="0" max="1.5">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label class="form-label" for="settings-prompt">Global System Instruction</label>
+                            <textarea class="form-input" id="settings-prompt" rows="4" style="resize: none;"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save System Configurations</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

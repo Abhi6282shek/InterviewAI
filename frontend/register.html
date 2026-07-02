@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="auth-container">
+        <!-- Register Card -->
+        <div class="auth-card glass-panel" id="register-box">
+            <div class="auth-header">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join us to start parsing resumes and grading interviews</p>
+            </div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label" for="reg-name">Full Name</label>
+                    <input class="form-input" type="text" id="reg-name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Email Address</label>
+                    <input class="form-input" type="email" id="reg-email" required placeholder="name@domain.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Password</label>
+                    <div style="position: relative;">
+                        <input class="form-input" type="password" id="reg-password" required placeholder="At least 6 characters" minlength="6" style="width: 100%; padding-right: 40px;">
+                        <button type="button" class="toggle-password" onclick="togglePassVisibility('reg-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; padding: 0; outline: none;">👁️</button>
+                    </div>
+                    <div class="strength-bar-container" style="margin-top: 8px;">
+                        <div class="strength-bar" id="reg-strength-bar"></div>
+                    </div>
+                    <div style="margin-top: 4px; display: flex; justify-content: space-between; align-items: center;">
+                        <span class="strength-text" id="reg-strength-text" style="color: var(--text-muted);">Strength: Too short</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-confirm-password">Confirm Password</label>
+                    <div style="position: relative;">
+                        <input class="form-input" type="password" id="reg-confirm-password" required placeholder="Re-enter password" minlength="6" style="width: 100%; padding-right: 40px;">
+                        <button type="button" class="toggle-password" onclick="togglePassVisibility('reg-confirm-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; padding: 0; outline: none;">👁️</button>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; user-select: none; line-height: 1.4;">
+                        <input type="checkbox" id="reg-terms" required style="margin-top: 3px; accent-color: var(--primary);">
+                        <span>I accept the <a href="#" onclick="API.showToast('Terms and Conditions of service accepted.', 'success'); return false;" style="color: var(--primary); text-decoration: underline;">Terms & Conditions</a> and consent to data storage.</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Register</button>
+            </form>
+            
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Sign in</a>
+            </div>
+        </div>
+
+        <!-- Verification Card -->
+        <div class="auth-card glass-panel" id="verify-box" style="display: none;">
+            <div class="auth-header">
+                <h2 class="auth-title">Verify Email</h2>
+                <p class="auth-subtitle" id="verify-email-text">Enter the 6-digit code sent to your email to activate your account</p>
+            </div>
+            
+            <form id="verify-form">
+                <div class="form-group">
+                    <label class="form-label" for="verify-code">Verification Code</label>
+                    <input class="form-input" type="text" id="verify-code" required placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.3em; width: 100%;">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Verify & Activate</button>
+                <button type="button" class="btn btn-secondary" id="resend-code-btn" style="width: 100%; margin-top: 12px;">Resend Code</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let generatedCode = '';
+        let registrationData = {};
+
+        // Toggle password show/hide
+        function togglePassVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        // Password strength meter logic
+        const passwordInput = document.getElementById('reg-password');
+        const strengthBar = document.getElementById('reg-strength-bar');
+        const strengthText = document.getElementById('reg-strength-text');
+
+        if (passwordInput) {
+            passwordInput.addEventListener('input', (e) => {
+                const val = e.target.value;
+                let score = 0;
+                if (val.length >= 6) score++;
+                if (/[A-Z]/.test(val)) score++;
+                if (/[0-9]/.test(val)) score++;
+                if (/[^A-Za-z0-9]/.test(val)) score++;
+
+                let pct = '0%';
+                let color = 'var(--text-muted)';
+                let label = 'Strength: Too short';
+
+                if (val.length > 0) {
+                    if (score === 1) {
+                        pct = '25%';
+                        color = 'var(--danger)';
+                        label = 'Strength: Weak';
+                    } else if (score === 2) {
+                        pct = '50%';
+                        color = 'var(--warning)';
+                        label = 'Strength: Medium';
+                    } else if (score === 3) {
+                        pct = '75%';
+                        color = 'var(--primary)';
+                        label = 'Strength: Good';
+                    } else if (score >= 4) {
+                        pct = '100%';
+                        color = 'var(--success)';
+                        label = 'Strength: Strong';
+                    }
+                }
+                strengthBar.style.width = pct;
+                strengthBar.style.backgroundColor = color;
+                strengthText.textContent = label;
+                strengthText.style.color = color;
+            });
+        }
+
+        // Registration form submission
+        document.getElementById('register-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = passwordInput.value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const termsChecked = document.getElementById('reg-terms').checked;
+
+            if (password !== confirmPassword) {
+                API.showToast('Passwords do not match!', 'error');
+                return;
+            }
+
+            if (!termsChecked) {
+                API.showToast('Please accept the Terms & Conditions.', 'error');
+                return;
+            }
+
+            // Save details for step 2
+            registrationData = { fullName, email, password };
+
+            // Generate verification code
+            generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Show toast with simulation instructions
+            API.showToast(`Verification code sent! Simulated code: ${generatedCode}`, 'success');
+
+            // Shift views
+            document.getElementById('register-box').style.display = 'none';
+            document.getElementById('verify-box').style.display = 'block';
+            document.getElementById('verify-email-text').textContent = `We've sent a 6-digit verification code to ${email}`;
+        });
+
+        // Verification form submission
+        document.getElementById('verify-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const codeInput = document.getElementById('verify-code').value.trim();
+
+            if (codeInput !== generatedCode) {
+                API.showToast('Invalid verification code!', 'error');
+                return;
+            }
+
+            try {
+                // Submit original data to backend register endpoint
+                const res = await API.post('/auth/register', registrationData);
+                Auth.saveSession(res);
+                API.showToast('Email verified and registration successful!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (err) {
+                // Toasted automatically
+            }
+        });
+
+        // Resend code trigger
+        document.getElementById('resend-code-btn').addEventListener('click', () => {
+            generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+            API.showToast(`New verification code sent! Simulated code: ${generatedCode}`, 'success');
+        });
+    </script>
+</body>
+</html>

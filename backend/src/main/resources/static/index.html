@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterviewAI - AI Mock Interview Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hero-section {
+            padding: 80px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--primary) 70%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: var(--font-heading);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        .features-section {
+            padding: 80px 0;
+            background: rgba(255,255,255,0.01);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .feature-card {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            background: var(--primary-glow);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(99,102,241,0.2);
+            color: var(--primary);
+        }
+        .stats-section {
+            padding: 60px 0;
+            text-align: center;
+        }
+        .pricing-section {
+            padding: 80px 0;
+        }
+        .pricing-card {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        .pricing-card.premium {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+        .price-tag {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            margin: 15px 0;
+        }
+        .price-tag span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Practice Technical & HR Interviews with Advanced AI</h1>
+            <p class="hero-subtitle">
+                Supercharge your placement preparation. Receive instant scoring, constructive critiques, ideal answers, and get resume keyword analysis directly parsed through our smart ATS scanner.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <a href="login.html" class="btn btn-primary" style="font-size: 1.05rem; padding: 14px 32px;">Practice For Free</a>
+                <a href="#features" class="btn btn-secondary" style="font-size: 1.05rem; padding: 14px 32px;">Explore Features</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Dashboard Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="grid-3">
+                <div class="glass-panel" style="padding: 24px;">
+                    <h2 style="font-size: 2.5rem; font-family: var(--font-heading); color: var(--primary);">25,000+</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">Interviews Completed</p>
+                </div>
+                <div class="glass-panel" style="padding: 24px;">
+                    <h2 style="font-size: 2.5rem; font-family: var(--font-heading); color: var(--secondary);">92%</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">User Satisfaction Rate</p>
+                </div>
+                <div class="glass-panel" style="padding: 24px;">
+                    <h2 style="font-size: 2.5rem; font-family: var(--font-heading); color: var(--success);">140+</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">Partner Placements Secured</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">Core Capabilities</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Everything you need to confidently ace your next engineering or HR round.</p>
+            </div>
+            
+            <div class="grid-3">
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">💻</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem;">Multi-Language Arena</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Practice in Java, Python, C++, SQL, Javascript, Spring Boot, DSA, Operating Systems, or specialized HR scenarios.
+                    </p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">🎙️</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem;">Speech-to-Text Grading</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Simulate real phone or virtual screeners. Talk directly into your microphone; our speech wrapper captures transcripts for grading.
+                    </p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">📄</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem;">ATS Resume Scanner</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Upload your PDF resume. Check score match rankings against modern parsing filters, find missing keywords, and track improvements.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">Pricing Plans</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Flexible tiers designed for college students and job seekers.</p>
+            </div>
+
+            <div class="grid-2" style="max-width: 800px; margin: 0 auto;">
+                <!-- Basic plan -->
+                <div class="pricing-card glass-panel">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem;">Standard Tier</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Practice basic mock interview settings</p>
+                    <div class="price-tag">$0 <span>/ forever</span></div>
+                    <ul style="text-align: left; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px;">
+                        <li>✓ 3 Mock sessions per month</li>
+                        <li>✓ Standard AI responses (Mock heuristics)</li>
+                        <li>✓ Standard PDF score downloads</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+                </div>
+
+                <!-- Premium plan -->
+                <div class="pricing-card glass-panel premium">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem;">Elite Tier</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Full API access for unlimited interviews</p>
+                    <div class="price-tag">$19 <span>/ month</span></div>
+                    <ul style="text-align: left; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px;">
+                        <li>✓ Unlimited dynamic AI interviews</li>
+                        <li>✓ Advanced Gemini 1.5 Flash API grading</li>
+                        <li>✓ Full ATS resume analyses & roadmap recommendations</li>
+                        <li>✓ Verified completion certificates (Score >= 70%)</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-primary" style="width: 100%;">Upgrade Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border-color); padding: 40px 0; text-align: center; font-size: 0.9rem; color: var(--text-secondary);">
+        <div class="container">
+            <p>© 2026 InterviewAI – Built for portfolio placement success. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

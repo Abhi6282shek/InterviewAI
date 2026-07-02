@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Results - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/result.css">
+    <!-- Chart.js and html2pdf CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="result-wrapper">
+        <div class="container" id="printable-area">
+            
+            <!-- Result Header Actions -->
+            <div class="header-actions">
+                <div>
+                    <span style="font-size: 0.85rem; color: var(--primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;" id="result-category">JAVA PRACTICE</span>
+                    <h1 style="font-size: 2.25rem; font-family: var(--font-heading);" id="result-title">Performance Summary</h1>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" onclick="exportPDF()">📥 Download PDF Report</button>
+                    <button class="btn btn-primary" id="view-cert-btn" style="display: none;">🎓 View Certificate</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Result Layout -->
+            <div class="results-grid">
+                
+                <!-- Left column: overall scores, metrics -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <div class="result-card glass-panel" style="text-align: center;">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Composite Score</h3>
+                        <div class="score-display-big" id="overall-score-pct">0%</div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);" id="overall-feedback-summary">Evaluation complete.</p>
+                        
+                        <div style="margin-top: 24px; display: flex; justify-content: space-around; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Duration</div>
+                                <div style="font-weight: 700; font-size: 1.1rem; margin-top: 4px;" id="result-duration">0 min</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Difficulty</div>
+                                <div style="font-weight: 700; font-size: 1.1rem; margin-top: 4px;" id="result-difficulty">N/A</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skill Diagnostics Radar Card -->
+                    <div class="result-card glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 20px; color: var(--primary);">Skill Diagnostic Matrix</h3>
+                        <div class="radar-container" style="position: relative; height: 250px; width: 100%; margin-bottom: 20px;">
+                            <canvas id="readinessRadarChart"></canvas>
+                        </div>
+                        <div class="metrics-sub-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                            <div class="metric-sub-item">
+                                <span class="metric-sub-label">Technical Depth</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                                    <span class="metric-sub-val" id="metric-tech">0%</span>
+                                    <div class="progress-bar-container" style="height: 4px; width: 60px; margin: 0;"><div class="progress-bar-fill" id="bar-tech" style="height: 100%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="metric-sub-item">
+                                <span class="metric-sub-label">Communication</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                                    <span class="metric-sub-val" id="metric-comm">0%</span>
+                                    <div class="progress-bar-container" style="height: 4px; width: 60px; margin: 0;"><div class="progress-bar-fill" id="bar-comm" style="height: 100%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="metric-sub-item">
+                                <span class="metric-sub-label">Grammar & Structure</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                                    <span class="metric-sub-val" id="metric-grammar">0%</span>
+                                    <div class="progress-bar-container" style="height: 4px; width: 60px; margin: 0;"><div class="progress-bar-fill" id="bar-grammar" style="height: 100%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="metric-sub-item">
+                                <span class="metric-sub-label">Confidence Pace</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                                    <span class="metric-sub-val" id="metric-confidence">0%</span>
+                                    <div class="progress-bar-container" style="height: 4px; width: 60px; margin: 0;"><div class="progress-bar-fill" id="bar-confidence" style="height: 100%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="metric-sub-item">
+                                <span class="metric-sub-label">Vocabulary Scope</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                                    <span class="metric-sub-val" id="metric-vocab">0%</span>
+                                    <div class="progress-bar-container" style="height: 4px; width: 60px; margin: 0;"><div class="progress-bar-fill" id="bar-vocab" style="height: 100%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="metric-sub-item">
+                                <span class="metric-sub-label">Behavioral Align</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                                    <span class="metric-sub-val" id="metric-behavior">0%</span>
+                                    <div class="progress-bar-container" style="height: 4px; width: 60px; margin: 0;"><div class="progress-bar-fill" id="bar-behavior" style="height: 100%;"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strengths and Weaknesses -->
+                    <div class="result-card glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 20px; color: var(--success);">✓ Key Strengths</h3>
+                        <ul class="bullet-list" id="strengths-list"></ul>
+                        
+                        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                        
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 20px; color: var(--danger);">✗ Gaps & Weaknesses</h3>
+                        <ul class="bullet-list" id="weaknesses-list"></ul>
+                    </div>
+
+                    <!-- Weak Topic Analysis Card -->
+                    <div class="result-card glass-panel" id="weak-topic-analysis-card">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 15px; color: var(--warning);">⚡ Weak Topic Analysis</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 15px;">Specific focus areas mapped from concepts in incorrect or incomplete answers:</p>
+                        <div id="weak-topics-container" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- Dynamically generated list -->
+                        </div>
+                    </div>
+
+                    <!-- AI Career Roadmap Card -->
+                    <div class="result-card glass-panel" id="ai-roadmap-card">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 20px; color: var(--primary); display: flex; align-items: center; gap: 8px;">🚀 AI Career Roadmap</h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div class="glass-panel" style="padding: 12px; text-align: center; border-radius: 8px; background: rgba(255,255,255,0.01);">
+                                <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 4px;">Current Level</span>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--secondary);" id="roadmap-level">Junior Developer</div>
+                            </div>
+                            <div class="glass-panel" style="padding: 12px; text-align: center; border-radius: 8px; background: rgba(255,255,255,0.01);">
+                                <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 4px;">Hiring Chance</span>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--success);" id="roadmap-hiring-chance">75% Odds</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 18px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Weak Skills Targeted</span>
+                            <div id="roadmap-weak-skills" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                <!-- Dynamically loaded tags -->
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 18px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Recommended Study Topics</span>
+                            <ul class="bullet-list" id="roadmap-topics" style="font-size: 0.85rem; margin-left: 15px; margin-top: 5px;"></ul>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Recommended Bridging Projects</span>
+                            <div id="roadmap-projects" style="display: flex; flex-direction: column; gap: 10px;">
+                                <!-- Dynamically loaded projects -->
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid var(--border-color); padding-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+                                <span>INTERVIEW READINESS INDEX</span>
+                                <span id="roadmap-readiness-pct">75%</span>
+                            </div>
+                            <div class="progress-bar-container" style="height: 6px; margin: 0; width: 100%; border-radius: 3px;">
+                                <div class="progress-bar-fill" id="roadmap-readiness-fill" style="width: 75%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: question logs -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 15px;">Question History Log</h3>
+                    
+                    <div id="qa-log-container">
+                        <!-- Questions lists will render dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div class="certificate-modal" id="cert-modal">
+        <div class="certificate-frame">
+            <div class="cert-border-accent"></div>
+            
+            <div style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--primary);">
+                INTERVIEWAI
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <h1 style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 800; color: #ffffff; letter-spacing: 0.05em;">CERTIFICATE OF COMPLETION</h1>
+                <p style="color: var(--text-secondary); margin-top: 6px; font-style: italic;">This credential confirms technical capability and mock interview performance</p>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">PROUDLY PRESENTED TO</p>
+                <h2 style="font-family: var(--font-heading); font-size: 2rem; color: #ffffff; margin-top: 8px; text-decoration: underline; text-decoration-color: var(--primary); text-underline-offset: 8px;" id="cert-user-name">John Doe</h2>
+            </div>
+            
+            <div style="max-width: 550px;">
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    For successfully executing the mock interview curriculum in <strong id="cert-category" style="color: var(--secondary);">Java Programming</strong>, exhibiting a mastery score of <strong id="cert-score" style="color: var(--success);">85%</strong> under dynamic temporal constraint criteria.
+                </p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
+                <div>
+                    Date: <span id="cert-date" style="color: var(--text-secondary);">July 1, 2026</span>
+                </div>
+                <div>
+                    Credential ID: <span id="cert-id" style="color: var(--text-secondary);">CERT-JAVA-12345</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="closeCert()" style="position: absolute; top: 15px; right: 15px; padding: 6px 12px; font-size: 0.8rem;">Close</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/result.js"></script>
+</body>
+</html>

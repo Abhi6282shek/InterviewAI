@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterviewAI - AI Mock Interview Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Practice Technical & HR Interviews with Advanced AI</h1>
+            <p class="hero-subtitle">
+                Supercharge your placement preparation. Receive instant scoring, constructive critiques, ideal answers, and get resume keyword analysis directly parsed through our smart ATS scanner.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="login.html" class="btn btn-primary" style="font-size: 1.05rem; padding: 14px 32px;">Practice For Free</a>
+                <a href="#demo" class="btn btn-secondary" style="font-size: 1.05rem; padding: 14px 32px;">Watch Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Demo Video Section -->
+    <section class="demo-section" id="demo">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">See It In Action</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Take a quick look at the interactive mock interview screen and instant AI performance score updates.</p>
+            </div>
+            
+            <div class="video-mockup glass-panel">
+                <div class="mockup-header">
+                    <span class="mockup-dot red"></span>
+                    <span class="mockup-dot yellow"></span>
+                    <span class="mockup-dot green"></span>
+                    <span class="mockup-title">InterviewAI Arena Demo</span>
+                </div>
+                <div class="video-container">
+                    <div class="play-overlay" onclick="window.location.href='login.html'">
+                        <div class="play-button">▶</div>
+                        <p style="margin-top: 15px; font-weight: 500; font-family: var(--font-heading); color: #ffffff;">Launch Arena Simulator</p>
+                    </div>
+                    
+                    <!-- Simulated Dashboard UI Mock -->
+                    <div class="mock-ui-preview">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                            <span style="font-weight: 600; color: var(--primary);">Mock Interview Arena</span>
+                            <span style="color: var(--warning); font-weight: bold;">⏱ 01:45</span>
+                        </div>
+                        <div style="flex-grow: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                            <div class="glass-panel" style="padding: 20px; display: flex; flex-direction: column; gap: 15px; justify-content: center; text-align: left;">
+                                <h4 style="color: var(--text-primary); margin: 0;">Question 3 of 5</h4>
+                                <p style="color: var(--text-secondary); margin: 0; font-size: 0.95rem;">Explain the difference between optimistic and pessimistic locking in relational databases.</p>
+                                <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; height: 100px; padding: 10px; font-size: 0.85rem; color: var(--text-muted);">
+                                    Typing or recording response...
+                                </div>
+                            </div>
+                            <div class="glass-panel" style="padding: 20px; display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center;">
+                                <span style="font-size: 2.5rem;">🎙️</span>
+                                <button class="btn btn-primary" style="font-size: 0.8rem; padding: 8px 16px;">Record Answer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">Core Capabilities</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Everything you need to confidently ace your next engineering or HR round.</p>
+            </div>
+            
+            <div class="grid-3">
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">💻</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem;">Multi-Language Arena</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Practice in Java, Python, C++, SQL, Javascript, Spring Boot, DSA, Operating Systems, or specialized HR scenarios.
+                    </p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">🎙️</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem;">Speech-to-Text Grading</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Simulate real phone or virtual screeners. Talk directly into your microphone; our speech wrapper captures transcripts for grading.
+                    </p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">📄</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem;">ATS Resume Scanner</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Upload your PDF resume. Check score match rankings against modern parsing filters, find missing keywords, and track improvements.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section class="how-it-works-section" id="how-it-works">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">How It Works</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Four simple steps to transform your placement preparation strategy.</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card glass-panel">
+                    <div class="step-number">01</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 8px;">Upload Resume</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0;">
+                        Upload your PDF resume. Our ATS scanner parses content and suggests key missing terms.
+                    </p>
+                </div>
+                <div class="step-card glass-panel">
+                    <div class="step-number">02</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 8px;">Setup Interview</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0;">
+                        Pick a category (Java, DSA, OS, HR, etc.), difficulty level, and speech configurations.
+                    </p>
+                </div>
+                <div class="step-card glass-panel">
+                    <div class="step-number">03</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 8px;">Speak or Type</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0;">
+                        Respond to dynamic AI questions. Use voice recognition to record and transcribe answers.
+                    </p>
+                </div>
+                <div class="step-card glass-panel">
+                    <div class="step-number">04</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 8px;">Get AI Grading</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0;">
+                        Receive instant rubric-based scores, detailed reports, and verified badges.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">System Architecture</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">A modern, decoupled, secure architecture designed for low latency and high scalability.</p>
+            </div>
+
+            <div class="architecture-diagram glass-panel">
+                <div class="arch-node glass-panel">
+                    <div class="arch-icon">💻</div>
+                    <h4 style="margin: 0;">Client Frontend</h4>
+                    <span style="margin-top: 5px;">HTML5, CSS3, Vanilla JS</span>
+                </div>
+                <div class="arch-arrow">➔</div>
+                <div class="arch-node glass-panel highlight">
+                    <div class="arch-icon">🔑</div>
+                    <h4 style="margin: 0;">JWT Security Layer</h4>
+                    <span style="margin-top: 5px;">Stateless Auth Headers</span>
+                </div>
+                <div class="arch-arrow">➔</div>
+                <div class="arch-node glass-panel">
+                    <div class="arch-icon">☕</div>
+                    <h4 style="margin: 0;">Spring Boot REST API</h4>
+                    <span style="margin-top: 5px;">Java RESTful Microservices</span>
+                </div>
+                <div class="arch-arrow">➔</div>
+                <div class="arch-split-container">
+                    <div class="arch-node glass-panel" style="width: 170px;">
+                        <div class="arch-icon">🤖</div>
+                        <h4 style="margin: 0;">Gemini 1.5 Flash</h4>
+                        <span style="margin-top: 5px;">LLM Heuristics</span>
+                    </div>
+                    <div class="arch-node glass-panel" style="width: 170px;">
+                        <div class="arch-icon">🗄️</div>
+                        <h4 style="margin: 0;">Relational DB</h4>
+                        <span style="margin-top: 5px;">JPA / Hibernate Logs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies Used Section -->
+    <section class="tech-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">Technologies Used</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Built using industrial stack components for reliability, performance, and security.</p>
+            </div>
+            
+            <div class="tech-grid">
+                <div class="tech-card glass-panel">
+                    <div style="font-size: 2rem;">☕</div>
+                    <span class="tech-badge">Backend</span>
+                    <h3 style="font-size: 1.1rem; font-family: var(--font-heading); margin: 0;">Spring Boot</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; margin: 0;">
+                        Robust microservices backend built on Java.
+                    </p>
+                </div>
+                <div class="tech-card glass-panel">
+                    <div style="font-size: 2rem;">🤖</div>
+                    <span class="tech-badge">AI Intelligence</span>
+                    <h3 style="font-size: 1.1rem; font-family: var(--font-heading); margin: 0;">Gemini 1.5 Flash</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; margin: 0;">
+                        Fast, state-of-the-art responses for grading.
+                    </p>
+                </div>
+                <div class="tech-card glass-panel">
+                    <div style="font-size: 2rem;">🔐</div>
+                    <span class="tech-badge">Security</span>
+                    <h3 style="font-size: 1.1rem; font-family: var(--font-heading); margin: 0;">JWT Auth</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; margin: 0;">
+                        Secure stateless session management.
+                    </p>
+                </div>
+                <div class="tech-card glass-panel">
+                    <div style="font-size: 2rem;">💻</div>
+                    <span class="tech-badge">Frontend</span>
+                    <h3 style="font-size: 1.1rem; font-family: var(--font-heading); margin: 0;">Vanilla JS & CSS</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; margin: 0;">
+                        Extremely fast, responsive glassmorphic interfaces.
+                    </p>
+                </div>
+                <div class="tech-card glass-panel">
+                    <div style="font-size: 2rem;">🗃️</div>
+                    <span class="tech-badge">Persistence</span>
+                    <h3 style="font-size: 1.1rem; font-family: var(--font-heading); margin: 0;">JPA / Hibernate</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; margin: 0;">
+                        Modular data modeling and entity tracking.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section class="screenshots-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2 style="font-size: 2.25rem; font-family: var(--font-heading); margin-bottom: 12px;">Platform Screenshots</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Explore the different modules of the InterviewAI application.</p>
+            </div>
+
+            <div class="screenshots-grid">
+                <!-- Screen 1: Dashboard -->
+                <div class="screenshot-item">
+                    <div class="screenshot-mockup glass-panel" style="padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-size: 0.8rem; font-weight: bold; color: var(--primary);">
+                            📊 Dashboard Overview
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <div class="glass-panel" style="padding: 10px; text-align: center;">
+                                <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary);">Completed</span>
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-top: 4px;">12</div>
+                            </div>
+                            <div class="glass-panel" style="padding: 10px; text-align: center;">
+                                <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary);">Avg Score</span>
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-top: 4px; color: var(--success);">84%</div>
+                            </div>
+                            <div class="glass-panel" style="padding: 10px; text-align: center;">
+                                <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary);">ATS Match</span>
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-top: 4px; color: var(--primary);">78%</div>
+                            </div>
+                        </div>
+                        <div style="flex-grow: 1; border-radius: 6px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; font-size: 0.7rem; color: var(--text-secondary);">
+                            Recent Activity: Java Intermediate practice graded on 2026-07-02. Score: 85%
+                        </div>
+                    </div>
+                    <div class="screenshot-desc">
+                        <h3>Analytics Dashboard</h3>
+                        <p>Track your interview progress counts, overall scores, ATS compatibility scores, and review dynamic recommendations generated by AI based on your stats.</p>
+                    </div>
+                </div>
+
+                <!-- Screen 2: Mock Arena -->
+                <div class="screenshot-item">
+                    <div class="screenshot-mockup glass-panel" style="padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                            <span>💻 Active Mock Arena</span>
+                            <span style="color: var(--warning);">⏱ 01:28</span>
+                        </div>
+                        <div style="padding: 10px 0; font-size: 0.85rem; font-weight: 500;">
+                            "Explain the difference between abstract classes and interfaces in Java 17."
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" style="font-size: 0.7rem; padding: 6px 12px; width: 100%;">🎙️ Speak Answer</button>
+                            <button class="btn btn-secondary" style="font-size: 0.7rem; padding: 6px 12px; width: 100%;">Submit & Next</button>
+                        </div>
+                    </div>
+                    <div class="screenshot-desc">
+                        <h3>Mock Arena Simulator</h3>
+                        <p>Practice with targeted coding or conceptual questions. Talk into your mic to trigger transcribing wrappers or type out responses under simulated timed conditions.</p>
+                    </div>
+                </div>
+
+                <!-- Screen 3: ATS Resume Scanner -->
+                <div class="screenshot-item">
+                    <div class="screenshot-mockup glass-panel" style="padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--secondary);">
+                            📄 ATS Resume Scan Report
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: bold; color: var(--success);">
+                                82%
+                            </div>
+                            <div style="flex-grow: 1; font-size: 0.75rem; color: var(--text-secondary);">
+                                <strong>File:</strong> developer_resume.pdf<br>
+                                <strong>Missing Keywords:</strong> Spring Boot, REST APIs, Microservices
+                            </div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">
+                            ✓ Recommendations: Structure work descriptions with active verbs.
+                        </div>
+                    </div>
+                    <div class="screenshot-desc">
+                        <h3>ATS Resume Scanner</h3>
+                        <p>Upload your PDF resume to parse it against professional keyword metrics. Identify missing tools and receive constructive resume optimization advice.</p>
+                    </div>
+                </div>
+
+                <!-- Screen 4: Certificates -->
+                <div class="screenshot-item">
+                    <div class="screenshot-mockup glass-panel" style="padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; background-image: radial-gradient(at 50% 50%, rgba(168,85,247,0.06) 0px, transparent 60%);">
+                        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--secondary);">Certificate of Completion</div>
+                        <div style="font-size: 1.1rem; font-family: var(--font-heading); font-weight: bold;">John Doe</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary); max-width: 200px;">has completed the Java Mock Curriculum with a passing score of 85%</div>
+                        <div style="font-size: 0.55rem; color: var(--text-muted); font-family: monospace;">VERIFIED ID: CERT-8f9d0c2</div>
+                    </div>
+                    <div class="screenshot-desc">
+                        <h3>Passing Certificates</h3>
+                        <p>Receive verifiable, passing score certificates when you achieve 70% or higher. Export results to professional PDF formats to present to recruiters.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border-color); padding: 40px 0; text-align: center; font-size: 0.9rem; color: var(--text-secondary);">
+        <div class="container">
+            <p>© 2026 InterviewAI – Built for portfolio placement success. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

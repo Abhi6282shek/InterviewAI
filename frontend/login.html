@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="auth-container">
+        <!-- Login Card -->
+        <div class="auth-card glass-panel" id="login-box">
+            <div class="auth-header">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to continue your interview preparation</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email Address</label>
+                    <input class="form-input" type="email" id="login-email" required placeholder="name@domain.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <div style="position: relative;">
+                        <input class="form-input" type="password" id="login-password" required placeholder="••••••••" style="width: 100%; padding-right: 40px;">
+                        <button type="button" class="toggle-password" onclick="togglePassVisibility('login-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; padding: 0; outline: none;">👁️</button>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; user-select: none;">
+                        <input type="checkbox" id="login-remember" style="accent-color: var(--primary);"> Remember me
+                    </label>
+                    <a href="#" class="forgot-link" id="show-forgot-btn" style="margin-bottom: 0;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+            </form>
+
+            <div class="social-divider">or continue with</div>
+
+            <div class="social-login-grid">
+                <button type="button" class="social-btn" onclick="API.showToast('Google OAuth is not configured for this local environment.', 'info')">
+                    <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google"> Google
+                </button>
+                <button type="button" class="social-btn" onclick="API.showToast('GitHub OAuth is not configured for this local environment.', 'info')">
+                    <img src="https://img.icons8.com/ios-filled/16/ffffff/github.png" alt="GitHub" class="github-icon-img"> GitHub
+                </button>
+            </div>
+            
+            <div class="auth-footer">
+                Don't have an account? <a href="register.html">Sign up</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Card -->
+        <div class="auth-card glass-panel" id="forgot-box" style="display: none;">
+            <div class="auth-header">
+                <h2 class="auth-title">Reset Password</h2>
+                <p class="auth-subtitle">Enter your email and we'll generate a reset token</p>
+            </div>
+            
+            <form id="forgot-form">
+                <div class="form-group">
+                    <label class="form-label" for="forgot-email">Email Address</label>
+                    <input class="form-input" type="email" id="forgot-email" required placeholder="name@domain.com">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Request Reset Token</button>
+                <button type="button" class="btn btn-secondary" id="back-to-login-btn" style="width: 100%; margin-top: 12px;">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Reset Password Verification Card -->
+        <div class="auth-card glass-panel" id="reset-box" style="display: none;">
+            <div class="auth-header">
+                <h2 class="auth-title">Set New Password</h2>
+                <p class="auth-subtitle">Enter your token and set a new password</p>
+            </div>
+            
+            <form id="reset-form">
+                <div class="form-group">
+                    <label class="form-label" for="reset-token">Reset Token</label>
+                    <input class="form-input" type="text" id="reset-token" required placeholder="RESET-XXXXXX">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reset-password">New Password</label>
+                    <div style="position: relative;">
+                        <input class="form-input" type="password" id="reset-password" required placeholder="At least 6 characters" style="width: 100%; padding-right: 40px;">
+                        <button type="button" class="toggle-password" onclick="togglePassVisibility('reset-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; padding: 0; outline: none;">👁️</button>
+                    </div>
+                    <div class="strength-bar-container" style="margin-top: 8px;">
+                        <div class="strength-bar" id="reset-strength-bar"></div>
+                    </div>
+                    <div style="margin-top: 4px; display: flex; justify-content: space-between; align-items: center;">
+                        <span class="strength-text" id="reset-strength-text" style="color: var(--text-muted);">Strength: Too short</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Save New Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Form switches
+        const loginBox = document.getElementById('login-box');
+        const forgotBox = document.getElementById('forgot-box');
+        const resetBox = document.getElementById('reset-box');
+
+        document.getElementById('show-forgot-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginBox.style.display = 'none';
+            forgotBox.style.display = 'block';
+        });
+
+        document.getElementById('back-to-login-btn').addEventListener('click', () => {
+            forgotBox.style.display = 'none';
+            loginBox.style.display = 'block';
+        });
+
+        // Toggle password show/hide
+        function togglePassVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        // Remember me pre-fill
+        const rememberCheckbox = document.getElementById('login-remember');
+        const emailInput = document.getElementById('login-email');
+        if (localStorage.getItem('rememberedEmail')) {
+            emailInput.value = localStorage.getItem('rememberedEmail');
+            if (rememberCheckbox) rememberCheckbox.checked = true;
+        }
+
+        // Password strength checker for Reset password input
+        const resetPassInput = document.getElementById('reset-password');
+        const resetBar = document.getElementById('reset-strength-bar');
+        const resetText = document.getElementById('reset-strength-text');
+
+        if (resetPassInput) {
+            resetPassInput.addEventListener('input', (e) => {
+                const val = e.target.value;
+                let score = 0;
+                if (val.length >= 6) score++;
+                if (/[A-Z]/.test(val)) score++;
+                if (/[0-9]/.test(val)) score++;
+                if (/[^A-Za-z0-9]/.test(val)) score++;
+
+                let pct = '0%';
+                let color = 'var(--text-muted)';
+                let label = 'Strength: Too short';
+
+                if (val.length > 0) {
+                    if (score === 1) {
+                        pct = '25%';
+                        color = 'var(--danger)';
+                        label = 'Strength: Weak';
+                    } else if (score === 2) {
+                        pct = '50%';
+                        color = 'var(--warning)';
+                        label = 'Strength: Medium';
+                    } else if (score === 3) {
+                        pct = '75%';
+                        color = 'var(--primary)';
+                        label = 'Strength: Good';
+                    } else if (score >= 4) {
+                        pct = '100%';
+                        color = 'var(--success)';
+                        label = 'Strength: Strong';
+                    }
+                }
+                resetBar.style.width = pct;
+                resetBar.style.backgroundColor = color;
+                resetText.textContent = label;
+                resetText.style.color = color;
+            });
+        }
+
+        // Form submissions
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = document.getElementById('login-password').value;
+
+            // Remember me persistence logic
+            if (rememberCheckbox && rememberCheckbox.checked) {
+                localStorage.setItem('rememberedEmail', email);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+            }
+
+            try {
+                const res = await API.post('/auth/login', { email, password });
+                Auth.saveSession(res);
+                API.showToast('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (err) {
+                // Error already toasted by API wrapper
+            }
+        });
+
+        document.getElementById('forgot-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+
+            try {
+                const res = await API.post('/auth/forgot-password', { email });
+                API.showToast('Reset token generated successfully!', 'success');
+                
+                // Prefill reset form and shift view
+                forgotBox.style.display = 'none';
+                resetBox.style.display = 'block';
+                document.getElementById('reset-token').value = res.token;
+            } catch (err) {}
+        });
+
+        document.getElementById('reset-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = document.getElementById('reset-token').value;
+            const newPassword = document.getElementById('reset-password').value;
+
+            try {
+                await API.post('/auth/reset-password', { token, newPassword });
+                API.showToast('Password changed successfully! Please log in.', 'success');
+                setTimeout(() => {
+                    resetBox.style.display = 'none';
+                    loginBox.style.display = 'block';
+                }, 1500);
+            } catch (err) {}
+        });
+    </script>
+</body>
+</html>

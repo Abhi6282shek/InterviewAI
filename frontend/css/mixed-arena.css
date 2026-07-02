@@ -1,0 +1,97 @@
+.mixed-wrapper {
+    padding: 40px 0;
+    flex-grow: 1;
+}
+
+/* Stepper progress bar */
+.stepper-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.step-node {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: var(--transition-smooth);
+}
+.step-node.active {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--primary-glow);
+}
+.step-node.completed {
+    color: var(--success);
+    border-color: var(--success);
+    background: rgba(16, 185, 129, 0.05);
+}
+.step-line {
+    flex-grow: 1;
+    height: 1px;
+    background: var(--border-color);
+    min-width: 15px;
+    max-width: 50px;
+}
+
+/* Workspace Grid Split */
+.mixed-workspace-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+@media (max-width: 992px) {
+    .mixed-workspace-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.workspace-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.workspace-right {
+    display: flex;
+    flex-direction: column;
+}
+.workspace-card {
+    padding: 24px;
+}
+
+.round-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: var(--primary-glow);
+    color: var(--primary);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* Media preview panes (camera & avatar) */
+.media-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.webcam-box {
+    border: 1px solid var(--border-color);
+}
+
+/* Report results */
+.report-workspace-card {
+    border-radius: 12px;
+}
+.metric-val {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

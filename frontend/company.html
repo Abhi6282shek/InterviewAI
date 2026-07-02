@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Mode Simulation - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/company.css">
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="company-wrapper">
+        <div class="container">
+            
+            <div class="company-header" style="text-align: center; margin-bottom: 40px;">
+                <h1 style="font-family: var(--font-heading); font-size: 2.25rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Company Interview Mode
+                </h1>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 10px auto 0; font-size: 0.95rem;">
+                    Practice mock sessions tailored to specific tech employers. Each company configuration mirrors their actual difficulty guidelines, interview rounds, and structural values.
+                </p>
+            </div>
+
+            <!-- Grid of Companies -->
+            <div class="company-grid" id="company-cards-container">
+                <!-- Cards will render dynamically -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Simulation Setup Modal -->
+    <div class="company-modal" id="company-setup-modal">
+        <div class="company-modal-card glass-panel">
+            <h2 id="modal-company-title" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 8px;">Google Interview Simulation</h2>
+            <div class="modal-company-badge" id="modal-company-difficulty">Hard</div>
+            
+            <div style="margin: 20px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                <p><strong>Focus Area:</strong> <span id="modal-company-style">Algorithmic limits, complex tree traversals, and Big-O efficiency.</span></p>
+                <p style="margin-top: 10px;"><strong>Key Criteria:</strong> <span id="modal-company-desc">Hiring panels grade optimal space solutions, edge cases, and technical articulation.</span></p>
+            </div>
+
+            <form id="company-simulation-form">
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label class="form-label" for="simulation-round">Select Round</label>
+                    <select class="form-input" id="simulation-round" style="background-color: var(--bg-secondary);">
+                        <option value="Technical">Technical Round (Category-specific CS & Architecture)</option>
+                        <option value="Behavioral">Behavioral Round (Company-specific values & Situational)</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex-grow: 1;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Launch Mock Session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/company.js"></script>
+</body>
+</html>

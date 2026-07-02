@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Arena IDE - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/ide.css">
+    <!-- AMD Loader for Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs' }});
+    </script>
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="ide-wrapper">
+        <div class="ide-container">
+            
+            <!-- Left Pane: Problem Statement & Test Cases -->
+            <div class="ide-left-pane">
+                <div class="glass-panel problem-statement-card">
+                    <div style="margin-bottom: 15px;">
+                        <label class="form-label" for="problem-selector" style="font-size: 0.8rem; text-transform: uppercase;">Select Challenge</label>
+                        <select class="form-input" id="problem-selector" style="background-color: var(--bg-secondary); margin-top: 4px;">
+                            <option value="two-sum">Two Sum (Easy)</option>
+                            <option value="reverse-list">Reverse Linked List (Easy)</option>
+                            <option value="valid-parentheses">Valid Parentheses (Easy)</option>
+                            <option value="group-anagrams">Group Anagrams (Medium)</option>
+                            <option value="merge-intervals">Merge Intervals (Medium)</option>
+                        </select>
+                    </div>
+
+                    <h2 id="problem-title" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">Two Sum</h2>
+                    <div class="problem-difficulty-badge" id="problem-difficulty">Easy</div>
+
+                    <div class="problem-description-content" id="problem-desc">
+                        <!-- Problem statement loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Test Cases Card -->
+                <div class="glass-panel test-cases-card">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">Verification Test Cases</h3>
+                    <div class="test-cases-list" id="test-cases-list">
+                        <!-- Test cases status rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Pane: Monaco Editor & Review -->
+            <div class="ide-right-pane">
+                <!-- Editor Panel -->
+                <div class="glass-panel editor-card" style="padding: 15px;">
+                    <div class="editor-header">
+                        <div class="form-group" style="margin: 0; min-width: 140px;">
+                            <select class="form-input" id="language-selector" style="background-color: var(--bg-secondary); padding: 6px 12px; font-size: 0.85rem;">
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="sql">SQL</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary" id="btn-run-code" style="padding: 8px 16px; font-size: 0.85rem;">▶ Run Code</button>
+                            <button class="btn btn-primary" id="btn-submit-code" style="padding: 8px 16px; font-size: 0.85rem;">🚀 Submit Code</button>
+                        </div>
+                    </div>
+
+                    <!-- Editor container -->
+                    <div id="monaco-editor-container"></div>
+                </div>
+
+                <!-- Bottom Logs & Code Review -->
+                <div class="ide-bottom-tabs">
+                    <div class="bottom-tab-buttons">
+                        <button class="bottom-tab-btn active" id="tab-btn-console" onclick="switchBottomTab('console')">Console Output</button>
+                        <button class="bottom-tab-btn" id="tab-btn-review" onclick="switchBottomTab('review')">AI Code Review</button>
+                    </div>
+
+                    <!-- Tab Content: Console -->
+                    <div class="bottom-tab-content active" id="bottom-tab-console">
+                        <div class="console-terminal" id="console-output">
+                            Console idle. Click Run Code to execute test cases.
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: AI Code Review -->
+                    <div class="bottom-tab-content" id="bottom-tab-review">
+                        <div class="review-output-panel" id="ai-review-content">
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Submit your solution to trigger an automated AI analysis of time/space complexity and structural clean-ups.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ide.js"></script>
+</body>
+</html>

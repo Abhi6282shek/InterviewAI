@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - InterviewAI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 40px 20px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-title {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .auth-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <div class="auth-container">
+        <!-- Login Card -->
+        <div class="auth-card glass-panel" id="login-box">
+            <div class="auth-header">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to continue your interview preparation</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email Address</label>
+                    <input class="form-input" type="email" id="login-email" required placeholder="name@domain.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <input class="form-input" type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                
+                <a href="#" class="forgot-link" id="show-forgot-btn">Forgot Password?</a>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+            </form>
+            
+            <div class="auth-footer">
+                Don't have an account? <a href="register.html">Sign up</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Card -->
+        <div class="auth-card glass-panel" id="forgot-box" style="display: none;">
+            <div class="auth-header">
+                <h2 class="auth-title">Reset Password</h2>
+                <p class="auth-subtitle">Enter your email and we'll generate a reset token</p>
+            </div>
+            
+            <form id="forgot-form">
+                <div class="form-group">
+                    <label class="form-label" for="forgot-email">Email Address</label>
+                    <input class="form-input" type="email" id="forgot-email" required placeholder="name@domain.com">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Request Reset Token</button>
+                <button type="button" class="btn btn-secondary" id="back-to-login-btn" style="width: 100%; margin-top: 12px;">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Reset Password Verification Card -->
+        <div class="auth-card glass-panel" id="reset-box" style="display: none;">
+            <div class="auth-header">
+                <h2 class="auth-title">Set New Password</h2>
+                <p class="auth-subtitle">Enter your token and set a new password</p>
+            </div>
+            
+            <form id="reset-form">
+                <div class="form-group">
+                    <label class="form-label" for="reset-token">Reset Token</label>
+                    <input class="form-input" type="text" id="reset-token" required placeholder="RESET-XXXXXX">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reset-password">New Password</label>
+                    <input class="form-input" type="password" id="reset-password" required placeholder="At least 6 characters">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Save New Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Form switches
+        const loginBox = document.getElementById('login-box');
+        const forgotBox = document.getElementById('forgot-box');
+        const resetBox = document.getElementById('reset-box');
+
+        document.getElementById('show-forgot-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginBox.style.display = 'none';
+            forgotBox.style.display = 'block';
+        });
+
+        document.getElementById('back-to-login-btn').addEventListener('click', () => {
+            forgotBox.style.display = 'none';
+            loginBox.style.display = 'block';
+        });
+
+        // Form submissions
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const res = await API.post('/auth/login', { email, password });
+                Auth.saveSession(res);
+                API.showToast('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (err) {
+                // Error already toasted by API wrapper
+            }
+        });
+
+        document.getElementById('forgot-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+
+            try {
+                const res = await API.post('/auth/forgot-password', { email });
+                API.showToast('Reset token generated successfully!', 'success');
+                
+                // Prefill reset form and shift view
+                forgotBox.style.display = 'none';
+                resetBox.style.display = 'block';
+                document.getElementById('reset-token').value = res.token;
+            } catch (err) {}
+        });
+
+        document.getElementById('reset-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = document.getElementById('reset-token').value;
+            const newPassword = document.getElementById('reset-password').value;
+
+            try {
+                await API.post('/auth/reset-password', { token, newPassword });
+                API.showToast('Password changed successfully! Please log in.', 'success');
+                setTimeout(() => {
+                    resetBox.style.display = 'none';
+                    loginBox.style.display = 'block';
+                }, 1500);
+            } catch (err) {}
+        });
+    </script>
+</body>
+</html>
