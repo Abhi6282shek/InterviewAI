@@ -1,5 +1,7 @@
 /* InterviewAI Client API Utility Wrapper */
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || !window.location.hostname) && window.location.port !== '8080'
+    ? 'http://localhost:8080/api'
+    : '/api';
 
 const API = {
     // Show global loader overlay
